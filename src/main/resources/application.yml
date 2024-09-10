@@ -1,0 +1,24 @@
+server:
+  shutdown: graceful
+  port: 8888
+
+spring:
+  application:
+    name: "spring-cloud-gateway"
+  cloud:
+    gateway:
+      routes:
+        - id: add-header-route
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/service1/**
+          filters:
+#            - StripPrefix=1  # /api 부분 제거
+            - StripPrefix=2  # /api/service1/ 부분 제거
+            - AddRequestHeader=X-Request-Foo, Bar
+            - AddResponseHeader=X-Response-Foo, Bar
+
+logging:
+  level:
+    io:
+      netty: DEBUG
